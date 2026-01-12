@@ -13,6 +13,23 @@ export interface Post {
   };
 }
 
+// Add this new interface
+export interface Project {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  description: string;
+  content: any;
+  tags: string; // "Next.js, React"
+  demoUrl?: string;
+  repoUrl?: string;
+  image: {
+    url: string;
+    alternativeText: string;
+  };
+}
+
 export async function fetchFromStrapi(path: string) {
   try {
     const res = await fetch(`${STRAPI_URL}/api/${path}`, {
@@ -47,6 +64,23 @@ export async function fetchPostBySlug(slug: string) {
     return json.data.length > 0 ? json.data[0] : null;
   } catch (error) {
     console.error("Error fetching post:", error);
+    return null;
+  }
+}
+
+export async function fetchProjectBySlug(slug: string) {
+  try {
+    const res = await fetch(
+      `${STRAPI_URL}/api/projects?filters[slug][$eq]=${slug}&populate=*`,
+      {
+        cache: "force-cache",
+      }
+    );
+
+    const json = await res.json();
+    return json.data.length > 0 ? json.data[0] : null;
+  } catch (error) {
+    console.error("Error fetching project:", error);
     return null;
   }
 }
