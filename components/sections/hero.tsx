@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Github, Linkedin } from "lucide-react";
+import { TextWave } from "@/components/ui/text-wave"; // <--- Import the new component
+import { RollingText } from "@/components/animate-ui/primitives/texts/rolling";
+import { ScrollDown } from "@/components/ui/scroll-down";
 
 export function Hero() {
   return (
@@ -12,10 +15,16 @@ export function Hero() {
 
       {/* Main Headlines */}
       <div className="space-y-4 max-w-3xl">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl">
-          Building digital products with{" "}
-          <span className="text-primary">purpose</span>.
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-6xl pb-2">
+          {/* Usage 1: Standard Text */}
+          <RollingText text="Building digital products with" delay={0} />
+
+          {/* Usage 2: Colored Text with Delay */}
+          <span className="text-primary ml-3 inline-block">
+            <RollingText text="purpose." delay={1.5} />
+          </span>
         </h1>
+
         <p className="text-xl text-muted-foreground max-w-[42rem] mx-auto leading-relaxed">
           I am a Full Stack Developer specializing in Next.js, Strapi, and
           modern UI design. I turn complex problems into simple, beautiful
@@ -60,6 +69,7 @@ export function Hero() {
           <span className="sr-only">LinkedIn</span>
         </Link>
       </div>
+      <ScrollDown />
     </section>
   );
 }
