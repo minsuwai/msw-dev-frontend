@@ -1,97 +1,117 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { Menu } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Menu } from "lucide-react";
-import { useTheme } from "next-themes";
+// 1. IMPORT SheetTitle HERE
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useState } from "react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navLinks = [
   { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
   { name: "Projects", href: "/projects" },
   { name: "Blog", href: "/blog" },
-  { name: "About", href: "/about" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export function Navbar() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
-  const [isOpen, setIsOpen] = useState(false); // To close menu after clicking a link
+  const { scrollY } = useScroll();
+
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+
+    if (latest > 50) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  });
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/50 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+    <motion.header
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: "-100%" },
+      }}
+      animate={hidden ? "hidden" : "visible"}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-background/80 backdrop-blur-md border-b border-white/10 shadow-sm"
+          : "bg-transparent border-transparent"
+      }`}
+    >
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          MSW<span className="text-primary">.dev</span>
+        <Link href="/" className="font-bold text-2xl tracking-tight">
+          MSW<span className="text-primary">.</span>
         </Link>
 
-        {/* --- DESKTOP MENU (Hidden on Mobile) --- */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                pathname === link.href
-                  ? "text-primary"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
+          <nav className="flex gap-6 text-sm font-medium">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`transition-colors hover:text-primary ${
+                  pathname === link.href
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
 
-          {/* Desktop Theme Toggle */}
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-full hover:bg-accent transition"
-          >
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 top-5" />
-            <span className="sr-only">Toggle theme</span>
-          </button>
+          <div className="h-4 w-px bg-border mx-2" />
+          <ThemeToggle />
         </div>
 
-        {/* --- MOBILE MENU (Visible on Small Screens) --- */}
+        {/* Mobile Menu */}
         <div className="flex md:hidden items-center gap-4">
-          {/* Mobile Theme Toggle (Always visible) */}
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-full hover:bg-accent transition"
-          >
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 top-5" />
-          </button>
+          <ThemeToggle />
 
-          {/* The Slide-out Sheet */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
+              <Button variant="ghost" size="icon" className="-mr-2">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
 
             <SheetContent side="right">
-              <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>{" "}
-              {/* Accessibility fix */}
-              <div className="flex flex-col gap-6 mt-10">
+              {/* 2. ADD THIS HIDDEN TITLE TO FIX THE ERROR */}
+              <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+
+              <div className="flex flex-col gap-6 mt-8">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    onClick={() => setIsOpen(false)} // Close menu when clicking
                     className={`text-lg font-medium transition-colors hover:text-primary ${
                       pathname === link.href
-                        ? "text-primary"
+                        ? "text-foreground"
                         : "text-muted-foreground"
                     }`}
                   >
@@ -103,6 +123,6 @@ export function Navbar() {
           </Sheet>
         </div>
       </div>
-    </nav>
+    </motion.header>
   );
 }

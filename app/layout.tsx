@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"; // or your font
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
+import { Preloader } from "@/components/ui/preloader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,12 +44,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        {/* <Preloader /> */}
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

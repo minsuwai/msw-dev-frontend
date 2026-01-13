@@ -1,50 +1,69 @@
-import { Hero } from "@/components/sections/hero";
-import { TechTicker } from "@/components/sections/tech-ticker";
-import { FeaturedProjects } from "@/components/sections/featured-projects";
-import { FadeIn } from "@/components/motion-wrapper";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Hero } from "@/components/sections/hero";
+import { TechParallax } from "@/components/sections/tech-parallax";
+import { FeaturedProjects } from "@/components/sections/featured-projects";
+import { Parallax } from "@/components/animate-ui/parallax";
+import { FadeIn } from "@/components/motion-wrapper";
+import { ExperienceTimeline } from "@/components/sections/experience-timeline";
+import { ExperienceHeader } from "@/components/sections/experience-header";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
-      {/* 1. Hero Section (Already has its own animation, but we can wrap it if we want) */}
-      <FadeIn>
-        <Hero />
-      </FadeIn>
+    <div className="flex flex-col overflow-hidden">
+      <section className="relative mb-24">
+        <Parallax offset={-60}>
+          <Hero />
+        </Parallax>
+      </section>
 
-      {/* 2. Infinite Tech Scroll */}
-      <FadeIn delay={0.2}>
-        <TechTicker />
-      </FadeIn>
+      <div className="mb-24">
+        <TechParallax />
+      </div>
 
-      {/* 3. Featured Projects (Fetching from Strapi) */}
-      <FeaturedProjects />
+      {/* FEATURED PROJECTS */}
+      <section className="container mx-auto px-4 z-20 relative bg-background/50 backdrop-blur-sm rounded-3xl py-8 mb-0">
+        <FadeIn>
+          <FeaturedProjects />
+        </FadeIn>
+      </section>
 
-      {/* 4. CTA / Final Section */}
-      <section className="py-24 md:py-32 border-t border-white/10">
-        <div className="container mx-auto px-4 text-center space-y-8">
-          <FadeIn direction="up">
-            <h2 className="text-4xl md:text-5xl font-bold max-w-2xl mx-auto">
-              Ready to bring your next idea to life?
+      {/* 1. THE ZOOM HEADER (Bridge) */}
+      <ExperienceHeader />
+
+      {/* 2. THE TIMELINE (Pulled Up) */}
+      {/* We add -mt-24 so the timeline starts sliding in WHILE the header is zooming out */}
+      <section className="container mx-auto px-0 sm:px-4 z-20 relative bg-background/50 backdrop-blur-sm rounded-3xl pb-8 -mt-24">
+        <FadeIn>
+          <ExperienceTimeline />
+        </FadeIn>
+      </section>
+
+      {/* CALL TO ACTION */}
+      <section className="py-24 md:py-32 relative z-0">
+        <Parallax offset={100}>
+          <div className="container mx-auto px-4 text-center space-y-8">
+            <h2 className="text-4xl md:text-6xl font-extrabold max-w-2xl mx-auto tracking-tighter">
+              Ready to build the <br />
+              <span className="text-primary">next big thing?</span>
             </h2>
-          </FadeIn>
 
-          <FadeIn direction="up" delay={0.2}>
             <p className="text-xl text-muted-foreground max-w-xl mx-auto">
-              I'm currently available for freelance work and open to new
-              opportunities.
+              I'm currently available for freelance work. Let's discuss your
+              project.
             </p>
-          </FadeIn>
 
-          <FadeIn direction="up" delay={0.4}>
-            <div className="flex gap-4 justify-center">
-              <Button size="lg" asChild className="h-12 px-8 text-lg">
+            <div className="flex gap-4 justify-center pt-4">
+              <Button
+                size="lg"
+                asChild
+                className="h-12 px-8 text-lg rounded-full shadow-lg hover:shadow-primary/25 transition-all"
+              >
                 <Link href="/contact">Start a Conversation</Link>
               </Button>
             </div>
-          </FadeIn>
-        </div>
+          </div>
+        </Parallax>
       </section>
     </div>
   );
