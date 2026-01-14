@@ -7,7 +7,6 @@ import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-// 1. IMPORT SheetTitle HERE
 import {
   Sheet,
   SheetContent,
@@ -30,6 +29,9 @@ export function Navbar() {
 
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  // 1. Add state to control the mobile menu
+  const [isOpen, setIsOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -92,7 +94,8 @@ export function Navbar() {
         <div className="flex md:hidden items-center gap-4">
           <ThemeToggle />
 
-          <Sheet>
+          {/* 2. Bind open state and onOpenChange handler */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="-mr-2">
                 <Menu className="h-5 w-5" />
@@ -101,7 +104,6 @@ export function Navbar() {
             </SheetTrigger>
 
             <SheetContent side="right">
-              {/* 2. ADD THIS HIDDEN TITLE TO FIX THE ERROR */}
               <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
 
               <div className="flex flex-col gap-6 mt-8">
@@ -109,6 +111,8 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
+                    // 3. Close the menu when a link is clicked
+                    onClick={() => setIsOpen(false)}
                     className={`text-lg font-medium transition-colors hover:text-primary ${
                       pathname === link.href
                         ? "text-foreground"

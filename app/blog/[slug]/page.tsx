@@ -6,7 +6,13 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { Metadata } from "next";
+import { ViewIncrementor } from "@/components/blog/view-incrementor";
 
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+// 1. Generate Metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await fetchPostBySlug(slug);
@@ -21,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.description,
       images: [
         {
-          url: post.cover?.url || "/opengraph-image.png", // Use post cover or fallback to site OG
+          url: post.cover?.url || "/opengraph-image.png",
           width: 1200,
           height: 630,
         },
@@ -30,6 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// 2. Generate Static Pages (SSG) for faster performance
 export async function generateStaticParams() {
   const posts = await fetchFromStrapi("posts");
   if (!posts) return [];
@@ -38,11 +45,8 @@ export async function generateStaticParams() {
   }));
 }
 
-type Props = {
-  params: Promise<{ slug: string }>;
-};
-
 export default async function BlogPostPage({ params }: Props) {
+  // Await params first (Next.js 15 Requirement)
   const { slug } = await params;
   const post: any = await fetchPostBySlug(slug);
 
@@ -62,6 +66,9 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <article className="container mx-auto py-12 md:py-20 px-4 max-w-3xl animate-in fade-in slide-in-from-bottom-8 duration-700">
+      {/* 3. FIX: Pass the awaited 'slug' string here */}
+      <ViewIncrementor slug={slug} />
+
       {/* Navigation */}
       <div className="mb-8">
         <Button
@@ -110,7 +117,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Main Content (Rich Text) */}
       <div
         className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground
         prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground

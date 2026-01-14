@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Preloader } from "@/components/ui/preloader";
-
+import { BottomWavePattern } from "@/components/layout/bottom-wave-pattern";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -108,6 +108,8 @@ export default function RootLayout({
               }}
             />
 
+            <BottomWavePattern />
+
             {/* --- CONTENT LAYER (Higher Z-Index) --- */}
             <div className="relative z-10 flex flex-col min-h-screen">
               <Navbar />
@@ -116,8 +118,8 @@ export default function RootLayout({
               </main>
 
               <footer className="border-t border-border/40 py-6 text-center text-sm text-muted-foreground bg-background/50 backdrop-blur-sm">
-                © {new Date().getFullYear()} Min Su Wai. Built with Next.js &
-                Strapi.
+                <BottomWavePattern />© {new Date().getFullYear()} Min Su Wai.
+                Built with Next.js & Strapi.
               </footer>
             </div>
           </div>

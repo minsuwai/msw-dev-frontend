@@ -7,7 +7,7 @@ import { ScrollDown } from "@/components/ui/scroll-down";
 
 export function Hero() {
   return (
-    <section className="flex flex-col items-center justify-center py-24 md:py-32 text-center space-y-8 animate-in fade-in zoom-in duration-500 slide-in-from-bottom-4">
+    <section className="flex flex-col items-center justify-center py-20 md:py-32 text-center space-y-8 animate-in fade-in zoom-in duration-500 slide-in-from-bottom-4">
       {/* Badge / Pill */}
       <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
         ✨ Open for new opportunities
@@ -46,12 +46,12 @@ export function Hero() {
           size="lg"
           className="h-12 px-8 text-base"
         >
-          <Link href="/contact">Contact Me</Link>
+          <Link href="/about">About Me</Link>
         </Button>
       </div>
 
       {/* Social Proof / Icons */}
-      <div className="flex gap-6 pt-8 text-muted-foreground">
+      {/* <div className="flex gap-6 pt-8 text-muted-foreground">
         <Link
           href="https://github.com"
           target="_blank"
@@ -68,7 +68,7 @@ export function Hero() {
           <Linkedin className="h-6 w-6" />
           <span className="sr-only">LinkedIn</span>
         </Link>
-      </div>
+      </div> */}
       <ScrollDown />
     </section>
   );
