@@ -57,7 +57,7 @@ export function ScrollDown() {
   return (
     <motion.div
       style={{ opacity, y: yOffset }}
-      className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center justify-center z-20 pointer-events-none"
+      className="absolute bottom-20 lg:bottom-10 left-1/2 -translate-x-1/2 flex items-center justify-center z-20 pointer-events-none"
     >
       <div className="relative flex items-center justify-center">
         {/* --- WAVE 1 (Starts immediately) --- */}
